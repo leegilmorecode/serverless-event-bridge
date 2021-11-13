@@ -1,0 +1,52 @@
+{
+  "name": "serverless-event-bridge",
+  "version": "1.0.0",
+  "description": "An example of using Amazon EventBridge to decouple your services",
+  "main": "index.ts",
+  "scripts": {
+    "prettier": "npx prettier --write .",
+    "deploy:develop": "sls deploy --stage=develop",
+    "remove:develop": "sls remove --stage=develop",
+    "build:develop": "sls package --stage=develop"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leegilmorecode/serverless-event-bridge.git"
+  },
+  "author": "Lee Gilmore",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leegilmorecode/serverless-event-bridge/issues"
+  },
+  "homepage": "https://github.com/leegilmorecode/serverless-event-bridge#readme",
+  "devDependencies": {
+    "@types/node": "^16.10.2",
+    "@types/pdfkit": "^0.12.3",
+    "@types/uuid": "^8.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "aws-sdk": "^2.999.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "fork-ts-checker-webpack-plugin": "^6.3.3",
+    "prettier": "^2.4.1",
+    "serverless": "^2.60.3",
+    "serverless-s3-remover": "^0.6.0",
+    "serverless-webpack": "^5.5.4",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.4.3",
+    "webpack": "^5.56.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "@middy/core": "^2.5.3",
+    "@middy/sqs-partial-batch-failure": "^2.5.3",
+    "@types/aws-lambda": "^8.10.83",
+    "ajv": "^8.7.1",
+    "ajv-formats": "^2.1.1",
+    "pdfkit": "^0.13.0",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
+  }
+}

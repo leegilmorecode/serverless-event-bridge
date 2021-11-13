@@ -1,0 +1,984 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Event"
+  },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Event": {
+        "type": "object",
+        "required": [
+          "hmrcDetails",
+          "note",
+          "period",
+          "employerAddress",
+          "employerPensionContribs",
+          "employmentDetails",
+          "payOptions",
+          "employee",
+          "logo",
+          "employerNi",
+          "isClosed",
+          "allowanceNote",
+          "employer",
+          "personalDetails",
+          "from",
+          "to",
+          "lines",
+          "paymentDate"
+        ],
+        "properties": {
+          "employee": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "employer": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "employerAddress": {
+            "$ref": "#/components/schemas/EmployerAddress"
+          },
+          "employmentDetails": {
+            "$ref": "#/components/schemas/EmploymentDetails"
+          },
+          "hmrcDetails": {
+            "$ref": "#/components/schemas/HmrcDetails"
+          },
+          "payOptions": {
+            "$ref": "#/components/schemas/PayOptions"
+          },
+          "personalDetails": {
+            "$ref": "#/components/schemas/PersonalDetails"
+          },
+          "allowanceNote": {
+            "type": "string"
+          },
+          "employerNi": {
+            "type": "number"
+          },
+          "employerPensionContribs": {
+            "type": "number"
+          },
+          "from": {
+            "type": "string",
+            "format": "date"
+          },
+          "isClosed": {
+            "type": "boolean"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventItem"
+            }
+          },
+          "logo": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "paymentDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "period": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "Employee": {
+        "type": "object",
+        "required": ["metadata", "name", "id", "url"],
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "EmployerAddress": {
+        "type": "object",
+        "required": ["country", "line5", "line4", "postCode", "line3", "line2", "line1"],
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "line1": {
+            "type": "string"
+          },
+          "line2": {
+            "type": "string"
+          },
+          "line3": {
+            "type": "string"
+          },
+          "line4": {
+            "type": "string"
+          },
+          "line5": {
+            "type": "string"
+          },
+          "postCode": {
+            "type": "string"
+          }
+        }
+      },
+      "EmploymentDetails": {
+        "type": "object",
+        "required": [
+          "cisSubContractor",
+          "furloughCalculationBasisAmount",
+          "payrollCode",
+          "onHold",
+          "furloughCalculationBasis",
+          "forcePreviousPayrollCode",
+          "jobTitle",
+          "partialFurlough",
+          "directorshipDetails",
+          "cis",
+          "isApprentice",
+          "posts",
+          "furloughHoursNormallyWorked",
+          "leaverDetails",
+          "workingPattern",
+          "furloughEnd",
+          "starterDetails",
+          "onFurlough",
+          "department",
+          "furloughHoursOnFurlough",
+          "furloughStart"
+        ],
+        "properties": {
+          "cis": {
+            "$ref": "#/components/schemas/Cis"
+          },
+          "department": {
+            "$ref": "#/components/schemas/Department"
+          },
+          "directorshipDetails": {
+            "$ref": "#/components/schemas/DirectorshipDetails"
+          },
+          "leaverDetails": {
+            "$ref": "#/components/schemas/LeaverDetails"
+          },
+          "starterDetails": {
+            "$ref": "#/components/schemas/StarterDetails"
+          },
+          "cisSubContractor": {
+            "type": "boolean"
+          },
+          "forcePreviousPayrollCode": {
+            "type": "string"
+          },
+          "furloughCalculationBasis": {
+            "type": "string"
+          },
+          "furloughCalculationBasisAmount": {
+            "type": "number"
+          },
+          "furloughEnd": {
+            "type": "string",
+            "format": "date"
+          },
+          "furloughHoursNormallyWorked": {
+            "type": "number"
+          },
+          "furloughHoursOnFurlough": {
+            "type": "number"
+          },
+          "furloughStart": {
+            "type": "string",
+            "format": "date"
+          },
+          "isApprentice": {
+            "type": "boolean"
+          },
+          "jobTitle": {
+            "type": "string"
+          },
+          "onFurlough": {
+            "type": "boolean"
+          },
+          "onHold": {
+            "type": "boolean"
+          },
+          "partialFurlough": {
+            "type": "boolean"
+          },
+          "payrollCode": {
+            "type": "string"
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Employee"
+            }
+          },
+          "workingPattern": {
+            "type": "string"
+          }
+        }
+      },
+      "HmrcDetails": {
+        "type": "object",
+        "required": [
+          "apprenticeshipLevy",
+          "officeNumber",
+          "includeEmploymentAllowanceOnMonthlyJournal",
+          "apprenticeshipLevyAllowance",
+          "payeReference",
+          "carryForwardUnpaidLiabilities",
+          "econ",
+          "utr",
+          "employmentAllowanceMaxClaim",
+          "smallEmployersRelief",
+          "employmentAllowance",
+          "accountsOfficeReference",
+          "quarterlyPaymentSchedule",
+          "coTax",
+          "id"
+        ],
+        "properties": {
+          "accountsOfficeReference": {
+            "type": "string"
+          },
+          "apprenticeshipLevy": {
+            "type": "boolean"
+          },
+          "apprenticeshipLevyAllowance": {
+            "type": "number"
+          },
+          "carryForwardUnpaidLiabilities": {
+            "type": "boolean"
+          },
+          "coTax": {
+            "type": "string"
+          },
+          "econ": {
+            "type": "string"
+          },
+          "employmentAllowance": {
+            "type": "boolean"
+          },
+          "employmentAllowanceMaxClaim": {
+            "type": "number"
+          },
+          "id": {
+            "type": "string"
+          },
+          "includeEmploymentAllowanceOnMonthlyJournal": {
+            "type": "boolean"
+          },
+          "officeNumber": {
+            "type": "string"
+          },
+          "payeReference": {
+            "type": "string"
+          },
+          "quarterlyPaymentSchedule": {
+            "type": "boolean"
+          },
+          "smallEmployersRelief": {
+            "type": "boolean"
+          },
+          "utr": {
+            "type": "string"
+          }
+        }
+      },
+      "PayOptions": {
+        "type": "object",
+        "required": [
+          "mileageVehicleType",
+          "withholdTaxRefundIfPayIsZero",
+          "period",
+          "method",
+          "autoAdjustForLeave",
+          "regularPayLines",
+          "basis",
+          "payAmountMultiplier",
+          "tags",
+          "baseHourlyRate",
+          "payAmount",
+          "taxAndNi",
+          "nationalMinimumWage",
+          "fpsFields",
+          "payCode",
+          "mapsMiles",
+          "ordinal"
+        ],
+        "properties": {
+          "fpsFields": {
+            "$ref": "#/components/schemas/FpsFields"
+          },
+          "taxAndNi": {
+            "$ref": "#/components/schemas/TaxAndNi"
+          },
+          "autoAdjustForLeave": {
+            "type": "boolean"
+          },
+          "baseHourlyRate": {
+            "type": "number"
+          },
+          "basis": {
+            "type": "string"
+          },
+          "mapsMiles": {
+            "type": "number"
+          },
+          "method": {
+            "type": "string"
+          },
+          "mileageVehicleType": {
+            "type": "string"
+          },
+          "nationalMinimumWage": {
+            "type": "boolean"
+          },
+          "ordinal": {
+            "type": "number"
+          },
+          "payAmount": {
+            "type": "number"
+          },
+          "payAmountMultiplier": {
+            "type": "number"
+          },
+          "payCode": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          },
+          "regularPayLines": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PayOptionsItem"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "withholdTaxRefundIfPayIsZero": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PersonalDetails": {
+        "type": "object",
+        "required": [
+          "passportNumber",
+          "lastName",
+          "passwordProtectPayslip",
+          "address",
+          "gender",
+          "mobile",
+          "niNumber",
+          "dateOfBirth",
+          "partnerDetails",
+          "telephone",
+          "pdfPassword",
+          "title",
+          "statePensionAge",
+          "firstName",
+          "photoUrl",
+          "middleName",
+          "email",
+          "emailPayslip",
+          "maritalStatus",
+          "emailStatement"
+        ],
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/EmployerAddress"
+          },
+          "partnerDetails": {
+            "$ref": "#/components/schemas/PartnerDetails"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "email": {
+            "type": "string"
+          },
+          "emailPayslip": {
+            "type": "boolean"
+          },
+          "emailStatement": {
+            "type": "boolean"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "maritalStatus": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          },
+          "niNumber": {
+            "type": "string"
+          },
+          "passportNumber": {
+            "type": "string"
+          },
+          "passwordProtectPayslip": {
+            "type": "boolean"
+          },
+          "pdfPassword": {
+            "type": "string"
+          },
+          "photoUrl": {
+            "type": "string"
+          },
+          "statePensionAge": {
+            "type": "number"
+          },
+          "telephone": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "EventItem": {
+        "type": "object",
+        "required": [
+          "secondaryDescription",
+          "code",
+          "hasSecondaryDescription",
+          "pensionId",
+          "attachmentOrderId",
+          "currencySymbol",
+          "description",
+          "formattedValue",
+          "type",
+          "value"
+        ],
+        "properties": {
+          "attachmentOrderId": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "currencySymbol": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "formattedValue": {
+            "type": "string"
+          },
+          "hasSecondaryDescription": {
+            "type": "boolean"
+          },
+          "pensionId": {
+            "type": "string"
+          },
+          "secondaryDescription": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        }
+      },
+      "Metadata": {
+        "type": "object"
+      },
+      "Cis": {
+        "type": "object",
+        "required": [
+          "tradingName",
+          "utr",
+          "companyNumber",
+          "reverseChargeVAT",
+          "vatRate",
+          "vatRegistered",
+          "type",
+          "verification",
+          "companyUtr",
+          "vatNumber"
+        ],
+        "properties": {
+          "verification": {
+            "$ref": "#/components/schemas/Verification"
+          },
+          "companyNumber": {
+            "type": "string"
+          },
+          "companyUtr": {
+            "type": "string"
+          },
+          "reverseChargeVAT": {
+            "type": "boolean"
+          },
+          "tradingName": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "utr": {
+            "type": "string"
+          },
+          "vatNumber": {
+            "type": "string"
+          },
+          "vatRate": {
+            "type": "number"
+          },
+          "vatRegistered": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Department": {
+        "type": "object",
+        "required": ["code", "color", "title", "employeeCount"],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "employeeCount": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          }
+        }
+      },
+      "DirectorshipDetails": {
+        "type": "object",
+        "required": ["isDirector", "leaveDate", "startDate", "niAlternativeMethod"],
+        "properties": {
+          "isDirector": {
+            "type": "boolean"
+          },
+          "leaveDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "niAlternativeMethod": {
+            "type": "boolean"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "LeaverDetails": {
+        "type": "object",
+        "required": ["isDeceased", "p45Sent", "paymentAfterLeaving", "hasLeft", "leaveDate"],
+        "properties": {
+          "hasLeft": {
+            "type": "boolean"
+          },
+          "isDeceased": {
+            "type": "boolean"
+          },
+          "leaveDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "p45Sent": {
+            "type": "boolean"
+          },
+          "paymentAfterLeaving": {
+            "type": "boolean"
+          }
+        }
+      },
+      "StarterDetails": {
+        "type": "object",
+        "required": ["starterDeclaration", "overseasEmployerDetails", "pensionerPayroll", "startDate"],
+        "properties": {
+          "overseasEmployerDetails": {
+            "$ref": "#/components/schemas/OverseasEmployerDetails"
+          },
+          "pensionerPayroll": {
+            "$ref": "#/components/schemas/PensionerPayroll"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "starterDeclaration": {
+            "type": "string"
+          }
+        }
+      },
+      "FpsFields": {
+        "type": "object",
+        "required": ["nonIndividual", "hoursNormallyWorked", "irregularPaymentPattern", "offPayrollWorker"],
+        "properties": {
+          "hoursNormallyWorked": {
+            "type": "string"
+          },
+          "irregularPaymentPattern": {
+            "type": "boolean"
+          },
+          "nonIndividual": {
+            "type": "boolean"
+          },
+          "offPayrollWorker": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TaxAndNi": {
+        "type": "object",
+        "required": ["postgradLoan", "week1Month1", "niTable", "secondaryClass1NotPayable", "studentLoan", "taxCode"],
+        "properties": {
+          "niTable": {
+            "type": "string"
+          },
+          "postgradLoan": {
+            "type": "boolean"
+          },
+          "secondaryClass1NotPayable": {
+            "type": "boolean"
+          },
+          "studentLoan": {
+            "type": "string"
+          },
+          "taxCode": {
+            "type": "string"
+          },
+          "week1Month1": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PayOptionsItem": {
+        "type": "object",
+        "required": ["code", "pensionId", "rate", "multiplier", "attachmentOrderId", "description", "value", "tags"],
+        "properties": {
+          "attachmentOrderId": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "multiplier": {
+            "type": "number"
+          },
+          "pensionId": {
+            "type": "string"
+          },
+          "rate": {
+            "type": "number"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "value": {
+            "type": "number"
+          }
+        }
+      },
+      "PartnerDetails": {
+        "type": "object",
+        "required": ["firstName", "lastName", "initials", "niNumber"],
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "initials": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "niNumber": {
+            "type": "string"
+          }
+        }
+      },
+      "Verification": {
+        "type": "object",
+        "required": [
+          "date",
+          "verificationRequest",
+          "number",
+          "verificationResponse",
+          "matchInsteadOfVerify",
+          "manuallyEntered",
+          "taxStatus"
+        ],
+        "properties": {
+          "verificationResponse": {
+            "$ref": "#/components/schemas/VerificationResponse"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "manuallyEntered": {
+            "type": "boolean"
+          },
+          "matchInsteadOfVerify": {
+            "type": "boolean"
+          },
+          "number": {
+            "type": "string"
+          },
+          "taxStatus": {
+            "type": "string"
+          },
+          "verificationRequest": {
+            "type": "string"
+          }
+        }
+      },
+      "OverseasEmployerDetails": {
+        "type": "object",
+        "required": ["overseasEmployer", "eeaCitizen", "epm6Scheme", "overseasSecondmentStatus"],
+        "properties": {
+          "eeaCitizen": {
+            "type": "boolean"
+          },
+          "epm6Scheme": {
+            "type": "boolean"
+          },
+          "overseasEmployer": {
+            "type": "boolean"
+          },
+          "overseasSecondmentStatus": {
+            "type": "string"
+          }
+        }
+      },
+      "PensionerPayroll": {
+        "type": "object",
+        "required": ["amount", "bereaved", "inReceiptOfPension"],
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "bereaved": {
+            "type": "boolean"
+          },
+          "inReceiptOfPension": {
+            "type": "boolean"
+          }
+        }
+      },
+      "VerificationResponse": {
+        "type": "object",
+        "required": [
+          "displayName",
+          "costOfMaterials",
+          "type",
+          "nino",
+          "worksRef",
+          "verificationNumber",
+          "action",
+          "costOfMaterialsUnrounded",
+          "crn",
+          "tradingName",
+          "unmatchedRate",
+          "numberOfPayments",
+          "umbrellaFee",
+          "item",
+          "address",
+          "emailStatementTo",
+          "partnership",
+          "validationMsg",
+          "totalDeducted",
+          "telephone",
+          "totalPayments",
+          "totalPaymentsUnrounded",
+          "taxTreatment",
+          "utr",
+          "employeeUniqueId",
+          "name",
+          "matched"
+        ],
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "item": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          },
+          "partnership": {
+            "$ref": "#/components/schemas/Partnership"
+          },
+          "action": {
+            "type": "string"
+          },
+          "costOfMaterials": {
+            "type": "string"
+          },
+          "costOfMaterialsUnrounded": {
+            "type": "string"
+          },
+          "crn": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "emailStatementTo": {
+            "type": "string"
+          },
+          "employeeUniqueId": {
+            "type": "string"
+          },
+          "matched": {
+            "type": "string"
+          },
+          "nino": {
+            "type": "string"
+          },
+          "numberOfPayments": {
+            "type": "number"
+          },
+          "taxTreatment": {
+            "type": "string"
+          },
+          "telephone": {
+            "type": "string"
+          },
+          "totalDeducted": {
+            "type": "string"
+          },
+          "totalPayments": {
+            "type": "string"
+          },
+          "totalPaymentsUnrounded": {
+            "type": "string"
+          },
+          "tradingName": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "umbrellaFee": {
+            "type": "string"
+          },
+          "unmatchedRate": {
+            "type": "string"
+          },
+          "utr": {
+            "type": "string"
+          },
+          "validationMsg": {
+            "type": "string"
+          },
+          "verificationNumber": {
+            "type": "string"
+          },
+          "worksRef": {
+            "type": "string"
+          }
+        }
+      },
+      "Address": {
+        "type": "object",
+        "required": ["country", "line", "postcode", "ukPostcode", "postCode"],
+        "properties": {
+          "country": {
+            "type": "string"
+          },
+          "line": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "postCode": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "ukPostcode": {
+            "type": "string"
+          }
+        }
+      },
+      "Name": {
+        "type": "object",
+        "required": ["sur", "initials", "fore", "ttl"],
+        "properties": {
+          "fore": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "initials": {
+            "type": "string"
+          },
+          "sur": {
+            "type": "string"
+          },
+          "ttl": {
+            "type": "string"
+          }
+        }
+      },
+      "Partnership": {
+        "type": "object",
+        "required": ["utr", "name"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "utr": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

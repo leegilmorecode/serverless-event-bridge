@@ -1,0 +1,17 @@
+export enum errorTypes {
+  ACCESS_FORBIDDEN = 1,
+  ERROR = 2,
+  INVALID_DEPENDENCIES = 3,
+  INVALID_OPERATION = 4,
+  VALIDATION_ERROR = 5,
+  NOT_FOUND = 6,
+  UNAUTHORISED = 7,
+  THROTTLED = 8,
+  SERVICE_UNAVAILABLE = 9,
+}
+
+export enum logLevels {
+  DEBUG = 0,
+  ERROR,
+  INFO,
+}

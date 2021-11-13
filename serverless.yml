@@ -1,0 +1,178 @@
+service: serverless-event-bridge
+variablesResolutionMode: 20210326
+provider:
+  name: aws
+  runtime: nodejs14.x
+  tracing:
+    apiGateway: true
+    lambda: true
+  lambdaHashingVersion: 20201221
+  memorySize: 1024
+  stage: ${opt:stage, 'develop'}
+  region: ${opt:region, 'eu-west-1'}
+  eventBridge:
+    useCloudFormation: true
+  apiGateway:
+    shouldStartNameWithService: true
+  iam:
+    role:
+      statements:
+        # note these permissions should be least privilage per lambda outside of this quick demo i.e. these perm will apply to both lambdas
+        - Effect: 'Allow'
+          Action:
+            - 'events:*'
+          Resource:
+            - !GetAtt HREventBus.Arn
+        - Effect: 'Allow'
+          Action:
+            - 's3:*'
+          Resource: arn:aws:s3:::${self:custom.pdfsBucket}/*
+        - Effect: 'Allow'
+          Action:
+            - 's3:*'
+          Resource: arn:aws:s3:::${self:custom.payslipsBucket}/*
+        - Effect: Allow
+          Action:
+            - sqs:DeleteMessage
+          Resource:
+            - { 'Fn::GetAtt': ['PDFGenQueue', 'Arn'] }
+plugins:
+  - serverless-webpack # build our code using serverless-webpack
+  - serverless-s3-remover # remove files from bucket on sls remove
+package:
+  individually: true
+functions:
+  # upload payslip post endpoint and lambda
+  uploadPayslip:
+    handler: src/payslips/functions/create.handler
+    timeout: 20
+    environment:
+      EVENT_BUS_NAME: ${self:custom.eventBusName}
+      PAYSLIP_LOGO_BUCKET_NAME: ${self:custom.payslipsBucket}
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    events:
+      - http:
+          path: payslips
+          method: post
+  # pdf generation lambda
+  PDFGeneration:
+    handler: src/pdf-generation/functions/create.handler
+    reservedConcurrency: 10
+    environment:
+      PAYSLIP_LOGO_BUCKET_NAME: ${self:custom.payslipsBucket}
+      PDF_BUCKET_NAME: ${self:custom.pdfsBucket}
+      AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - PDFGenQueue
+              - Arn
+          batchSize: 10
+# custom resources
+resources:
+  Resources:
+    # HR EventBridge Custom Bus for our domain services
+    HREventBus:
+      Type: AWS::Events::EventBus
+      Properties:
+        Name: 'HREventBus'
+    # Custom Schema
+    StatesSchemasRegistry:
+      Type: AWS::EventSchemas::Registry
+      Properties:
+        RegistryName: 'custom.schema'
+        Description: 'Contains the schemas used within serverless-event-bridge project'
+    # EventBridge Archive - this allows us to replay events when needed
+    HREventBusArchive:
+      Type: 'AWS::Events::Archive'
+      Properties:
+        ArchiveName: HREventBusArchive
+        Description: Archive of all payslip.uploaded events
+        EventPattern:
+          source:
+            - 'payslip.uploaded'
+        RetentionDays: 0 # store indefinitely
+        SourceArn: !GetAtt HREventBus.Arn
+    # EventBridge Schema Discovery
+    EventBridgeDiscoverer:
+      Type: AWS::EventSchemas::Discoverer
+      Properties:
+        SourceArn: !GetAtt HREventBus.Arn
+        Description: 'EventBridge Schema Discovery for HR Event Bus'
+    # PDF Generation fifo queue
+    PDFGenQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: 'PDFGenQueue.fifo'
+        FifoQueue: true
+        ContentBasedDeduplication: true # we want to deduplicate messages at queue level with the same content
+        DeduplicationScope: 'queue'
+        RedrivePolicy:
+          deadLetterTargetArn:
+            Fn::GetAtt:
+              - 'PDFGenerationDLQ' # we send any failed batches which have been tied 5 times into a dead letter queue
+              - 'Arn'
+          maxReceiveCount: 5
+    # PDF Generation Dead Letter Queue
+    PDFGenerationDLQ:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: 'PDFGenerationDLQ.fifo'
+        FifoQueue: true
+        ContentBasedDeduplication: true
+        DeduplicationScope: 'queue'
+    # EventBridge pdf geneation event rule - send any payslip.uploaded events to the PDF generation queue
+    EventRule:
+      Type: AWS::Events::Rule
+      Properties:
+        Description: 'PayslipUploadedEventRule'
+        EventBusName: 'HREventBus'
+        EventPattern:
+          account:
+            - !Sub '${AWS::AccountId}'
+          source:
+            - 'payslip.uploaded'
+        Targets:
+          - Arn: !GetAtt PDFGenQueue.Arn
+            Id: 'PDFGenQueue'
+            SqsParameters:
+              MessageGroupId: 'PayslipUploaded'
+    # Allow EventBridge to invoke SQS with a queue policy
+    EventBridgeToToSqsPolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: events.amazonaws.com
+              Action: SQS:SendMessage
+              Resource: !GetAtt PDFGenQueue.Arn
+        Queues:
+          - Ref: PDFGenQueue
+    # payslips image data bucket
+    PayslipsDataBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.payslipsBucket}
+    # pdfs bucket
+    PDFsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.pdfsBucket}
+custom:
+  payslipsBucket: serverless-event-bridge-payslips-${self:provider.stage}
+  pdfsBucket: serverless-event-bridge-pdfs-${self:provider.stage}
+  eventBusName: HREventBus
+  # remove the contents of the s3 bucket on serverless remove
+  remover:
+    buckets:
+      - ${self:custom.payslipsBucket}
+      - ${self:custom.pdfsBucket}
+  # webpack configuration
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules:
+      forceExclude:
+        - aws-sdk

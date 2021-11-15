@@ -138,6 +138,21 @@ resources:
             Id: 'PDFGenQueue'
             SqsParameters:
               MessageGroupId: 'PayslipUploaded'
+            InputTransformer:
+              InputPathsMap:
+                'detail': '$.detail'
+                'detail-type': '$.detail-type'
+                'source': '$.source'
+                'account': '$.account'
+                'region': '$.region'
+              InputTemplate: |
+                {
+                  "detail" : <detail>,
+                  "detail-type" : "<detail-type>",
+                  "source": "<source>",
+                  "account" : "<account>",
+                  "region" : "<region>"
+                }
     # Allow EventBridge to invoke SQS with a queue policy
     EventBridgeToToSqsPolicy:
       Type: AWS::SQS::QueuePolicy
